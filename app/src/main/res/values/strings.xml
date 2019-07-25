@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">IOT</string>
+    <string name="title_activity_device_control">DeviceControlActivity</string>
+    <string name="title_activity_device_controller">DeviceControllerActivity</string>
+
+    <string-array name="pin_no">
+        <item>D0</item>//D3
+        <item>D2</item>//D4
+        <item>D4</item>//D2
+        <item>D5</item>//D1
+        <item>D12</item>//D6
+        <item>D13</item>//D7
+        <item>D14</item>//D5
+        <item>D15</item>//D8
+        <item>D16</item>//D0
+    </string-array>
+
+    <string-array name="db_id">
+        <item>0</item>//D3
+        <item>2</item>//D4
+        <item>4</item>//D2
+        <item>5</item>//D1
+        <item>12</item>//D6
+        <item>13</item>//D7
+        <item>14</item>//D5
+        <item>15</item>//D8
+        <item>16</item>//D0
+    </string-array>
 </resources>

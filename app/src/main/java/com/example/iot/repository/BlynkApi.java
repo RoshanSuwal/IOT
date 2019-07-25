@@ -33,7 +33,7 @@ public interface BlynkApi {
     //application network status
     //../token/isAppConnected
     @GET("/{token}/isAppConnected")
-    Call<Response> isAppConnected(@Path("token")String token);
+    Call<ResponseBody> isAppConnected(@Path("token")String token);
 
     //get project connected at particular token
     //../token/project

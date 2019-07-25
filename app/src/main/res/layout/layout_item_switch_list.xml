@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:orientation="vertical"
+    android:layout_weight="10"
+    android:id="@+id/linearlayout"
+    android:layout_margin="10dp"
+    android:padding="10dp">
+
+    <TextView
+        android:textSize="20dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:id="@+id/onoffstatus_textview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"/>
+
+
+    <TextView
+        android:layout_weight="2"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/switch_name"/>
+
+    <TextView
+        android:layout_weight="2"
+        android:id="@+id/item_switch_pin_no"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <TextView
+        android:layout_weight="2"
+        android:id="@+id/pin_status"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+</LinearLayout>

@@ -20,12 +20,12 @@
 
     <Button
         android:id="@+id/newaccount_btn"
-        android:text="CREATE NEW ACCOUNT"
+        android:text="NodeMCU Project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <Button
         android:id="@+id/login_btn"
-        android:text="ALREADY HAVE AN ACCOUNT"
+        android:text="All Projects"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

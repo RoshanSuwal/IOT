@@ -1,9 +1,9 @@
 package com.example.iot.repository;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.example.iot.MainActivity;
+import com.example.iot.DeviceControllerMVP.DeviceControllerContract;
+import com.example.iot.model.Switch;
 
 import java.io.IOException;
 
@@ -29,60 +29,94 @@ public class RestRepository {
     }
 
 
-//update the pin value
-    public boolean updatePin(String token,String pin,int value){
-        final boolean[] result = new boolean[1];
-        blynkApi.updatePin(token,pin,value).enqueue(new Callback<ResponseBody>() {
+
+    //check that application is connected to the server and has active project with provided token
+    public void isAppConnected(String token){
+        blynkApi.isAppConnected(token).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    if (response.isSuccessful()){
+                        String string=new String(response.body().bytes());
+                        Log.d("IOT", "onResponse: "+string);
+                    }
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    //////////////////////////////////Presenter
+
+    public void updateSwitchPinValue(final Switch asitch, String token, final DeviceControllerContract.RestServiceinterface restServiceinterface){
+        blynkApi.updatePin(token,asitch.getPin_number(),asitch.getInversePinStateValue()).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                if ( call.isExecuted() && response.isSuccessful()){
+                    restServiceinterface.updateToDao(asitch);
+                    Log.d("RestApi",call.request().toString()+" : successful");
+                }else {
+                    Log.d("RestApi",call.request().toString()+" : failure");
+                    restServiceinterface.failToUpdate();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                restServiceinterface.failToUpdate();
+            }
+        });
+    }
+
+    public void addSwitch(final Switch aswitch, String token, final DeviceControllerContract.RestServiceinterface restServiceinterface){
+        blynkApi.updatePin(token,aswitch.getPin_number(),aswitch.getPin_value()).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (call.isExecuted() && response.isSuccessful()){
-                    try {
-
-                        Log.i("TAG", "onResponse:"+new String(response.body().bytes()));
-                        Log.i("TAG", call.request().toString());
-                        result[0] =true;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    restServiceinterface.addSwitchToDao(aswitch);
+                    Log.d("RestApi","ADD SWITCH"+call.request().toString()+" : successful");
+                }else{
+                    restServiceinterface.failToUpdate();
+                    Log.d("RestApi","ADD SWITCH"+call.request().toString()+" : failed");
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                result[0] =false;
+                restServiceinterface.failToUpdate();
             }
         });
-
-        return result[0];
     }
 
-    //get pin status from blynk server and update to the controller UI through inteface
-    public int getPin(String token, String pin, final UiInterface uiInterface){
-        final int[] i = new int[1];
-        blynkApi.getPinValue(token,pin).enqueue(new Callback<ResponseBody>() {
+    public void deleteSwitch(final Switch aswitch, String token, final DeviceControllerContract.RestServiceinterface restServiceinterface){
+        blynkApi.updatePin(token,aswitch.getPin_number(),-10).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()){
-                    try {
-                        String string=new String(response.body().bytes());
-                        i[0] = Integer.parseInt(string.replaceAll("\\D+",""));
-                        Log.i("TAG", "getPin: "+i[0]);
-                        uiInterface.setPinMethod(1,i[0]);
-                        Log.i("TAG", "onResponse: "+ call.request());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                if (call.isExecuted() && response.isSuccessful()){
+                    restServiceinterface.deleteIndao(aswitch);
+                    Log.d("RestApi","Delete SWITCH"+call.request().toString()+" : successful");
+                }else {
+                    restServiceinterface.failToUpdate();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    i[0]=100;
+                restServiceinterface.failToUpdate();
             }
         });
-        Log.i("TAG", "getPin: "+i[0]);
-        return i[0];
     }
+
 
 
 }
